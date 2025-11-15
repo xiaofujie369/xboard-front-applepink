@@ -7,7 +7,16 @@
 
   <title>可云</title>
 
-  <!-- 粉金色流光主题样式（新增部分） -->
+  <!-- 强制验证：未通过则跳转 verify.html -->
+  <script>
+    if (!sessionStorage.getItem("cf_verified")) {
+      if (!window.location.pathname.includes("verify.html")) {
+        window.location.href = "/verify.html";
+      }
+    }
+  </script>
+
+  <!-- 粉金色主题 CSS -->
   <link rel="stylesheet" href="/assets/custom-theme.css">
 
   <!-- UMI 主文件 -->
