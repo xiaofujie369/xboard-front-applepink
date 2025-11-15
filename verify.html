@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>安全验证 - 可云</title>
+
+  <!-- 粉金主题样式 -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffe4f2, #ffd6ea, #ffb8d7);
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      width: 360px;
+      box-shadow: 0 6px 30px rgba(255, 120, 170, 0.25);
+      border: 1px solid rgba(255,120,170,0.3);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #ff6faf, #ff9fd1, #ffd4e9);
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 700;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98);}
+      to { opacity: 1; transform: scale(1);}
+    }
+
+    .msg {
+      color: #d96a9e;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+  </style>
+
+  <!-- Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>可云 · 安全验证</h2>
+    <div class="msg">请完成下方的人机验证以继续访问</div>
+
+    <div class="cf-turnstile"
+         data-sitekey="0x4AAAAAACBHnys8HYE9DGGZ"
+         data-callback="verified">
+    </div>
+  </div>
+
+  <script>
+    function verified() {
+      sessionStorage.setItem("cf_verified", "1");
+      window.location.href = "/#/login";
+    }
+  </script>
+
+</body>
+</html>
