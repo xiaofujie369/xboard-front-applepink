@@ -1,0 +1,88 @@
+/* === Apple Pink Gold 主色 === */
+:root {
+    --primary-color: #ff6faf;          /* 粉金色主色 */
+    --primary-color-hover: #ff87c0;    /* hover 浅亮粉 */
+    --primary-glow: rgba(255, 111, 175, 0.45);
+    --primary-light: rgba(255, 200, 230, 0.6);
+}
+
+/* 登录卡片整体柔光 */
+.login-container {
+    box-shadow: 0 4px 25px rgba(255, 140, 190, 0.22) !important;
+    border: 1px solid rgba(255, 140, 190, 0.25) !important;
+}
+
+/* 标题粉金渐变 */
+.login-title {
+    background: linear-gradient(90deg, #ff6faf 0%, #ff9fd1 50%, #ffd4e9 100%);
+    -webkit-background-clip: text;
+    color: transparent !important;
+    font-weight: 700 !important;
+}
+
+/* 副标题轻粉色 */
+.login-subtitle {
+    color: #ff8ec2 !important;
+}
+
+/* 输入框边框粉金色 */
+.ant-input,
+.ant-input-affix-wrapper {
+    border-color: #ff6faf !important;
+}
+
+/* hover 时发光 */
+.ant-input:hover,
+.ant-input-affix-wrapper:hover {
+    border-color: #ff87c0 !important;
+    box-shadow: 0 0 6px var(--primary-glow) !important;
+}
+
+/* 登录按钮粉金色背景 */
+.ant-btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 登录按钮 hover 效果 */
+.ant-btn-primary:hover {
+    background-color: var(--primary-color-hover) !important;
+    border-color: var(--primary-color-hover) !important;
+}
+
+/* === 按钮流光效果 === */
+.ant-btn-primary::after {
+    content: "";
+    position: absolute;
+    left: -50px;
+    top: 0;
+    height: 100%;
+    width: 50px;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.7) 50%,
+        transparent 100%
+    );
+    transform: skewX(-25deg);
+    animation: shine 2.8s infinite;
+    opacity: 0.5;
+}
+
+@keyframes shine {
+    0% { left: -60px; }
+    60% { left: 110%; }
+    100% { left: 110%; }
+}
+
+/* 链接粉金色 */
+a {
+    color: var(--primary-color) !important;
+}
+
+a:hover {
+    color: var(--primary-color-hover) !important;
+}
