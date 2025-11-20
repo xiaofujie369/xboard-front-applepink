@@ -16,57 +16,95 @@
     }
   </script>
 
-  <!-- 自动公告弹窗（最终必成功版） -->
+  <!-- 登录成功后公告弹窗（每次登录弹 2 次 + 第二次随机时间） -->
   <script>
     (function () {
-      const todayKey = "notice_shown_" + new Date().toISOString().slice(0, 10);
 
-      // 已显示过公告则不再显示
-      if (localStorage.getItem(todayKey)) return;
+      // 每次登录都重新弹两次
+      sessionStorage.removeItem("notice_first_done");
+      sessionStorage.removeItem("notice_second_done");
 
-      // 弹窗内容
-      const html = `
-      <div class="notice-mask" id="noticePopup"
-           style="position:fixed;left:0;top:0;width:100%;height:100%;
-           background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);z-index:99999;
-           display:flex;align-items:center;justify-content:center;">
-        <div class="notice-box"
-             style="width:500px;max-width:92%;background:white;
-             padding:24px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);
-             position:relative;font-size:15px;">
+      // 弹窗 HTML
+      function popupHTML() {
+        return `
+        <div class="notice-mask" id="noticePopup"
+             style="position:fixed;left:0;top:0;width:100%;height:100%;
+             background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);z-index:99999;
+             display:flex;align-items:center;justify-content:center;">
+          <div class="notice-box"
+               style="width:500px;max-width:92%;background:white;
+               padding:24px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);
+               position:relative;font-size:15px;">
 
-          <div id="noticeClose"
-               style="position:absolute;right:16px;top:12px;font-size:22px;
-               cursor:pointer;">×</div>
+            <div id="noticeClose"
+                 style="position:absolute;right:16px;top:12px;font-size:22px;
+                 cursor:pointer;">×</div>
 
-          <h2 style="margin:0 0 10px;font-weight:700;">📢 新人必看公告</h2>
+            <h2 style="margin:0 0 10px;font-weight:700;">📢 新人必看公告</h2>
 
-          <p>欢迎来到可云，请务必阅读「使用文档」。</p>
-          <p>最新访问域名：<b>shy521.webn.cc</b></p>
-          <p>加入 TG 群组：<a href="https://t.me/ss_keyun" target="_blank">点击加入</a></p>
-          <p>不会使用？请查看左侧菜单的「使用文档」。</p>
+            <p>欢迎来到可云，请务必阅读顶部公告栏信息。</p>
+            <p>最新访问域名：<b>shy521.webn.cc</b></p>
+            <p>加入 TG 群组：<a href="https://t.me/ss_keyun" target="_blank">点击加入</a></p>
+            <p>不会使用？请查看左侧菜单的「使用文档」。</p>
 
-          <button id="noticeBtn"
-                  style="margin-top:16px;width:100%;padding:10px;border:none;
-                  background:#ff6faf;color:white;border-radius:10px;
-                  font-weight:600;cursor:pointer;">
-            我已知晓
-          </button>
-        </div>
-      </div>`;
+            <button id="noticeBtn"
+                    style="margin-top:16px;width:100%;padding:10px;border:none;
+                    background:#ff6faf;color:white;border-radius:10px;
+                    font-weight:600;cursor:pointer;">
+              我已知晓
+            </button>
+          </div>
+        </div>`;
+      }
 
-      // 页面加载后注入弹窗
-      window.addEventListener("DOMContentLoaded", () => {
-        document.body.insertAdjacentHTML("beforeend", html);
-
-        const close = () => {
-          document.getElementById("noticePopup")?.remove();
-          localStorage.setItem(todayKey, "1");
-        };
-
+      // 显示弹窗
+      function showPopup() {
+        document.body.insertAdjacentHTML("beforeend", popupHTML());
+        const close = () => document.getElementById("noticePopup")?.remove();
         document.getElementById("noticeClose").onclick = close;
         document.getElementById("noticeBtn").onclick = close;
-      });
+      }
+
+      // 判断是否成功进入 Dashboard
+      function isDashboardReady() {
+        const t = document.body.innerText;
+        return (
+          t.includes("仪表盘") ||
+          t.includes("Dashboard") ||
+          t.includes("套餐") ||
+          t.includes("首页")
+        );
+      }
+
+      // 登录成功后执行：弹窗两次
+      function runTwoPopups() {
+
+        // 第一次：立即弹
+        if (!sessionStorage.getItem("notice_first_done")) {
+          showPopup();
+          sessionStorage.setItem("notice_first_done", "1");
+        }
+
+        // 第二次：5~15 秒随机弹
+        if (!sessionStorage.getItem("notice_second_done")) {
+          const delay = 5000 + Math.random() * 10000;
+          setTimeout(() => {
+            showPopup();
+            sessionStorage.setItem("notice_second_done", "1");
+          }, delay);
+        }
+      }
+
+      // 轮询判断是否进入 Dashboard（登录成功）
+      let tryCount = 0;
+      const timer = setInterval(() => {
+        if (isDashboardReady()) {
+          clearInterval(timer);
+          runTwoPopups();
+        }
+        if (tryCount++ > 60) clearInterval(timer);
+      }, 500);
+
     })();
   </script>
 
