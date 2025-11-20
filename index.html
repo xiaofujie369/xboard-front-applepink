@@ -16,15 +16,15 @@
     }
   </script>
 
-  <!-- 登录成功后公告弹窗（每次登录弹 2 次 + 第二次随机时间） -->
+  <!-- 登录成功后公告弹窗（每次登录弹两次） -->
   <script>
     (function () {
 
-      // 每次登录都重新弹两次
-      sessionStorage.removeItem("notice_first_done");
-      sessionStorage.removeItem("notice_second_done");
+      // 登录时清空记录
+      sessionStorage.removeItem("first_popup_done");
+      sessionStorage.removeItem("second_popup_done");
 
-      // 弹窗 HTML
+      // 弹窗 HTML 函数
       function popupHTML() {
         return `
         <div class="notice-mask" id="noticePopup"
@@ -43,9 +43,9 @@
             <h2 style="margin:0 0 10px;font-weight:700;">📢 新人必看公告</h2>
 
             <p>欢迎来到可云，请务必阅读顶部公告栏信息。</p>
-            <p>最新访问域名：<b>shy521.webn.cc</b></p>
+            <p>请保存我们最新域名：<b>https:shy521.webn.cc</b></p>
             <p>加入 TG 群组：<a href="https://t.me/ss_keyun" target="_blank">点击加入</a></p>
-            <p>不会使用？请查看左侧菜单的「使用文档」。</p>
+            <p>不会使用？请查看左侧「使用文档」。</p>
 
             <button id="noticeBtn"
                     style="margin-top:16px;width:100%;padding:10px;border:none;
@@ -65,45 +65,65 @@
         document.getElementById("noticeBtn").onclick = close;
       }
 
-      // 判断是否成功进入 Dashboard
-      function isDashboardReady() {
+      // Dashboard 判断 (登录成功)
+      function dashboardReady() {
         const t = document.body.innerText;
-        return (
-          t.includes("仪表盘") ||
-          t.includes("Dashboard") ||
-          t.includes("套餐") ||
-          t.includes("首页")
-        );
+        return t.includes("仪表盘") ||
+               t.includes("Dashboard") ||
+               t.includes("套餐") ||
+               t.includes("首页");
       }
 
-      // 登录成功后执行：弹窗两次
-      function runTwoPopups() {
+      // 弹窗流程控制
+      function beginPopupProcess() {
 
-        // 第一次：立即弹
-        if (!sessionStorage.getItem("notice_first_done")) {
+        /** 第一弹窗 */
+        if (!sessionStorage.getItem("first_popup_done")) {
           showPopup();
-          sessionStorage.setItem("notice_first_done", "1");
+          sessionStorage.setItem("first_popup_done", "1");
         }
 
-        // 第二次：5~15 秒随机弹
-        if (!sessionStorage.getItem("notice_second_done")) {
-          const delay = 5000 + Math.random() * 10000;
-          setTimeout(() => {
-            showPopup();
-            sessionStorage.setItem("notice_second_done", "1");
-          }, delay);
+        /** 第二弹窗流程：点击监控 + 随机弹窗 */
+        if (!sessionStorage.getItem("second_popup_done")) {
+
+          // 等待用户关闭第一次弹窗
+          const waitFirstClose = setInterval(() => {
+            if (!document.getElementById("noticePopup")) {
+              clearInterval(waitFirstClose);
+
+              // 开始监听 60 秒点击
+              let clicked = false;
+              const clickListener = () => {
+                if (!clicked) {
+                  clicked = true;
+                  const delay = 3000 + Math.random() * 7000; // 3~10 秒
+                  setTimeout(() => {
+                    showPopup();
+                    sessionStorage.setItem("second_popup_done", "1");
+                  }, delay);
+                }
+              };
+
+              document.addEventListener("click", clickListener, { once: true });
+
+              // 60 秒后取消监听
+              setTimeout(() => {
+                document.removeEventListener("click", clickListener);
+              }, 60000);
+            }
+          }, 300);
         }
       }
 
-      // 轮询判断是否进入 Dashboard（登录成功）
-      let tryCount = 0;
-      const timer = setInterval(() => {
-        if (isDashboardReady()) {
-          clearInterval(timer);
-          runTwoPopups();
+      // 等待 Dashboard 渲染完成后执行弹窗逻辑
+      let checkCount = 0;
+      const checkLogin = setInterval(() => {
+        if (dashboardReady()) {
+          clearInterval(checkLogin);
+          beginPopupProcess();
         }
-        if (tryCount++ > 60) clearInterval(timer);
-      }, 500);
+        if (++checkCount > 80) clearInterval(checkLogin); // 超时保护
+      }, 400);
 
     })();
   </script>
