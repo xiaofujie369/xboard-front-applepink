@@ -1,119 +1,119 @@
-/* === Apple Pink Gold 主色 === */
-:root {
-    --primary-color: #ff6faf;          /* 粉金色主色 */
-    --primary-color-hover: #ff87c0;    /* hover 浅亮粉 */
-    --primary-glow: rgba(255, 111, 175, 0.45);
-    --primary-light: rgba(255, 200, 230, 0.6);
-}
-
-/* === 全局页面缩放 (PC + 手机自动适配) === */
+/* === 全局背景（Apple 风渐变） === */
 body {
-    zoom: 0.90;    /* PC 端缩小 90% 更协调 */
+    background: linear-gradient(145deg, #f5f7fb 0%, #ffffff 40%, #f6f8fc 100%) !important;
+    zoom: 0.92;   /* PC 缩放优化 */
 }
 
+/* 手机端缩放 */
 @media (max-width: 768px) {
     body {
-        zoom: 0.85;   /* 手机端进一步缩小，卡片更紧凑 */
+        zoom: 0.86;
     }
 }
 
-/* === 登录卡片美化 === */
-.login-container {
-    box-shadow: 0 4px 25px rgba(255, 140, 190, 0.22) !important;
-    border: 1px solid rgba(255, 140, 190, 0.25) !important;
-    border-radius: 14px !important;
+/* === 套餐卡片 Ultimate 风格 === */
+.ant-card {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    padding: 0 !important;
+    border: 1px solid rgba(200,200,200,0.25) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.05) !important;
+    transition: all 0.32s ease !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
 }
 
-/* 标题粉金渐变 */
-.login-title {
-    background: linear-gradient(90deg, #ff6faf 0%, #ff9fd1 50%, #ffd4e9 100%);
-    -webkit-background-clip: text;
-    color: transparent !important;
+/* 悬停高级浮起效果 */
+.ant-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.08) !important;
+    border-color: rgba(255,150,200,0.35) !important;
+}
+
+/* 卡片内部间距收紧（更专业） */
+.ant-card-body {
+    padding: 18px 20px !important;
+}
+
+/* === 套餐标题 === */
+.ant-card h2,
+.plan-title {
+    font-size: 1.05rem !important;
     font-weight: 700 !important;
-    letter-spacing: 1px;
+    margin-bottom: 10px !important;
+    color: #222 !important;
 }
 
-/* 副标题轻粉色 */
-.login-subtitle {
-    color: #ff8ec2 !important;
+/* 副标题次级信息 */
+.plan-subtitle {
+    font-size: 0.85rem !important;
+    color: #555 !important;
 }
 
-/* 输入框边框粉金色 */
-.ant-input,
-.ant-input-affix-wrapper {
-    border-color: #ff6faf !important;
-    border-radius: 10px !important;
-    transition: 0.25s;
+/* === 图标缩小，让整个卡片更平衡 === */
+.ant-card img,
+.plan-card img {
+    width: 22px !important;
+    height: 22px !important;
 }
 
-/* hover 时发光 */
-.ant-input:hover,
-.ant-input-affix-wrapper:hover {
-    border-color: #ff87c0 !important;
-    box-shadow: 0 0 6px var(--primary-glow) !important;
+/* === 分组标题（服务说明、套餐详情） === */
+.plan-section-title {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    margin: 14px 0 10px !important;
+    color: #1f1f1f !important;
 }
 
-/* 登录按钮粉金色背景 */
+/* === 列表更紧凑、专业 === */
+.plan-card ul li,
+.ant-card ul li {
+    margin: 4px 0 !important;
+    line-height: 1.32 !important;
+    font-size: 0.88rem !important;
+}
+
+/* 列表左侧图标统一风格（更精致） */
+.plan-card ul li::marker {
+    color: #ff7fb6 !important;
+}
+
+/* === “立即订阅”按钮升级为渐变按钮 === */
 .ant-btn-primary {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
+    margin-top: 12px !important;
+    background: linear-gradient(135deg, #ff7fb8 0%, #ff9ccf 50%, #ffcce4 100%) !important;
+    border: none !important;
     color: white !important;
-    position: relative;
-    overflow: hidden;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
     border-radius: 10px !important;
+    height: 38px !important;
+    box-shadow: 0 4px 16px rgba(255,120,175,0.35) !important;
+    transition: all 0.25s ease !important;
 }
 
-/* 登录按钮 hover 效果 */
+/* hover 增加亮度 */
 .ant-btn-primary:hover {
-    background-color: var(--primary-color-hover) !important;
-    border-color: var(--primary-color-hover) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(255,120,175,0.45) !important;
 }
 
-/* === 按钮流光效果 === */
-.ant-btn-primary::after {
-    content: "";
-    position: absolute;
-    left: -50px;
-    top: 0;
-    height: 100%;
-    width: 50px;
-    background: linear-gradient(
-        120deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.7) 50%,
-        transparent 100%
-    );
-    transform: skewX(-25deg);
-    animation: shine 2.8s infinite;
-    opacity: 0.55;
+/* === 顶部选项卡（全部 / 按周期 / 按流量）美化 === */
+.ant-segmented-item-selected {
+    background: #ffe4f1 !important;
+    color: #ff4fa7 !important;
+    font-weight: 600;
 }
 
-@keyframes shine {
-    0% { left: -60px; }
-    60% { left: 110%; }
-    100% { left: 110%; }
+/* 未选中样式 */
+.ant-segmented-item {
+    color: #777 !important;
 }
 
-/* 链接粉金色 */
-a {
-    color: var(--primary-color) !important;
-}
-
-a:hover {
-    color: var(--primary-color-hover) !important;
-}
-
-/* 输入框 placeholder 更柔和一点 */
-.ant-input::placeholder {
-    color: #ffb7d7 !important;
-    opacity: 0.8;
-}
-
-/* 登录页背景轻柔粉色雾面效果（可选） */
-.login-page {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 220, 245, 0.55),
-        rgba(255, 180, 210, 0.35)
-    );
+/* === PC 三列布局间距优化 === */
+@media (min-width: 996px) {
+    .ant-row {
+        gap: 12px !important;
+        justify-content: center !important;
+    }
 }
